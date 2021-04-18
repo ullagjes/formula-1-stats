@@ -4,6 +4,8 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 //UTILS
 import firebaseInstance from '../utils/firebaseInstance';
+import { getRacerDetails } from '../utils/apiHelpers';
+import { deleteFromFirestore } from '../utils/firebaseHelpers';
 //COMPONENTS
 import AppTitle from '../components/AppTitle';
 import RacerListItem from '../components/RacerListItem';
@@ -11,16 +13,16 @@ import Screen from '../components/Screen';
 import colors from '../config/colors';
 import FavoriteRacerAction from '../components/FavoriteRacerAction';
 
-
 function MyRacersScreen({ navigation }) {
     
     const [theData, setTheData] = useState([])
+    const [myRacerData, setMyRacerData] = useState(null)
 
-    useEffect(() => {  
+    //REALTIME DATA FROM FIRESTORE
+    useEffect(() => { 
         let ref = firebaseInstance
         .firestore()
         .collection('SavedRacers')
-
         return ref.onSnapshot((snapshot) => {
             let data = []
             snapshot.forEach((doc) => {
@@ -33,49 +35,41 @@ function MyRacersScreen({ navigation }) {
         })
     }, []);
 
-    const [myRacerData, setMyRacerData] = useState([])
-
+    //FETCH DATA FROM API
     useEffect(() => {
         getMyRacerData()
-        return console.log('finished')
     }, [theData])
 
+    //RETURNS DETAILS FOR ALL SELECTED RACERS IN FIRESTORE DATA
     async function getData() {
         return Promise.all(
             theData.map( async (i) => {
-                return fetch(`http://ergast.com/api/f1/drivers/${i.racerId}.json`).then((res) => res.json())
+                return getRacerDetails(i.racerId)
             })
         )
     }
 
+    //ADDS DETAILS TO STATE
     async function getMyRacerData(){
         const result = await getData()
         setMyRacerData(result) 
     }
 
+    //FILTERS DATA FOR DRIVERID. USED AS PARAMETER IN DELETE FUNCTION
     function filterData(driverId){
         return theData.filter((i) => i.racerId === driverId)
-
     }
 
+    //DELETES DRIVER FROM FIRESTORE COLLECTION
     async function handleDelete(driverId){
         let driver = filterData(driverId)
-        const collection = firebaseInstance
-        .firestore()
-        .collection('SavedRacers')
-
-        const document = await collection.doc(driver[0].id).delete()
-        .then(() => {
-            console.log('Deleted!')
-        }).catch((error) => {
-            console.error('error', error)
-        })
+        return deleteFromFirestore(driver[0].id, 'SavedRacers', driverId)   
     }
 
     return (
         <Screen>
             <AppTitle style={styles.title}>Your favorite racers</AppTitle>
-            {myRacerData.length === 0 ? <Text>No racers selected</Text> : myRacerData.map((i, index) => {
+            {myRacerData === null ? <Text>Loading data...</Text> : myRacerData.map((i, index) => {
                 return(
                     <View key={index}>
                         <FlatList
@@ -122,6 +116,18 @@ const styles = StyleSheet.create({
 export default MyRacersScreen;
 
 /*
+//return fetch(`http://ergast.com/api/f1/drivers/${i.racerId}.json`).then((res) => res.json())
+        
+        /*const collection = firebaseInstance
+        .firestore()
+        .collection('SavedRacers')
+
+        const document = await collection.doc(driver[0].id).delete()
+        .then(() => {
+            console.log('Deleted!')
+        }).catch((error) => {
+            console.error('error', error)
+        })
 
 async function getPreviousData(collectionName) {
         const collection = firebaseInstance.firestore().collection(collectionName)
