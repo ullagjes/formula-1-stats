@@ -17,7 +17,7 @@ export async function deleteFromFirestore(filterData, collectionName, driverId){
 /*export function getRealTimeData(collectionName){
     let ref = firebaseInstance
     .firestore()
-    .collection(collectionName)
+    .collection(collectionName) 
 
     ref.onSnapshot((snapshot => {
         let data = []
