@@ -16,26 +16,55 @@ import RacerDetailsScreen from './App/screens/RacerDetailsScreen';
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 
-
-export default function App() {
+const HomeStack = () => {
   return (
-    <NavigationContainer>
-      <Racers>
-        <Stack.Navigator>
+    <Stack.Navigator>
+       
           <Stack.Screen 
-            name="Home"
+            name="Welcome"
             component={WelcomeScreen}
-            //options={{title: 'Welcome'}}
           />
-
           <Stack.Screen 
             name="Racers" component={RacersScreen}
           />
           <Stack.Screen 
             name="Racer" component={RacerDetailsScreen}
           />
-        </Stack.Navigator>
+          <Stack.Screen name="MyRacers" component={MyRacersScreen} options={{title: 'My racers'}}/>
+    </Stack.Navigator>
+  )
+}
+
+const MyPage = () => {
+  return(
+    <Stack.Navigator>
+      <Stack.Screen 
+        name="MyRacers"
+        component={MyRacersScreen}
+        options={{title: "Favorites"}}/>
+      <Stack.Screen
+        name="Racer" component={RacerDetailsScreen}
+      />
+    </Stack.Navigator>
+  )
+}
+
+export default function App() {
+  return (
+    <NavigationContainer>
+      <Racers>
         
+        <Tab.Navigator>
+          <Tab.Screen
+            name="Home"
+            component={HomeStack}
+          ></Tab.Screen>
+          <Tab.Screen
+            name="MyPage"
+            component={MyPage}
+            options={{title: "My favorites"}}
+          ></Tab.Screen>
+        </Tab.Navigator>
       </Racers>
     </NavigationContainer>
   );

@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "1097254282227",
+    "project_id": "tema-7-abb1b",
+    "storage_bucket": "tema-7-abb1b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1097254282227:android:9611b33bce83e1141d2886",
+        "android_client_info": {
+          "package_name": "com.ulla.firebasetest"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1097254282227-nfjskkqoetbunppp5pdjhofvdq2vd64f.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyARQt5L5dlPilN_s28MGGkNUzALAPZOYWI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1097254282227-nfjskkqoetbunppp5pdjhofvdq2vd64f.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "1097254282227-5grqgq7ofhpi8hd7ummuq5pj30undclc.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.ulla.firebasetest"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,56 +1,81 @@
 import React, { useState, useEffect } from 'react';
-import { FlatList, StyleSheet, View } from 'react-native';
-import { MaterialCommunityIcons } from '@expo/vector-icons'
-//UTILS
-//to do: make function for driverdata
+import { FlatList, StyleSheet, View, Text } from 'react-native';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 
+//UTILS
+import firebaseInstance from '../utils/firebaseInstance';
 //COMPONENTS
-import AppTitle from '../components/AppTitle'
-import RacerListItem from '../components/RacerListItem'
+import AppTitle from '../components/AppTitle';
+import RacerListItem from '../components/RacerListItem';
 import Screen from '../components/Screen';
 import colors from '../config/colors';
+import FavoriteRacerAction from '../components/FavoriteRacerAction';
 
-const racers = [
-    'vettel', 'hamilton', 'bottas'
-]
 
-function MyRacersScreen(props) {
+function MyRacersScreen({ navigation }) {
+    
+    const [theData, setTheData] = useState([])
+
+    useEffect(() => {  
+        let ref = firebaseInstance
+        .firestore()
+        .collection('SavedRacers')
+
+        return ref.onSnapshot((snapshot) => {
+            let data = []
+            snapshot.forEach((doc) => {
+                data.push({
+                    id: doc.id,
+                    ...doc.data()
+                })
+            })
+            setTheData(data)
+        })
+    }, []);
 
     const [myRacerData, setMyRacerData] = useState([])
 
     useEffect(() => {
         getMyRacerData()
         return console.log('finished')
-        //fetch(`http://ergast.com/api/f1/drivers/vettel.json`)
-        //.then((response) => response.json())
-        //.then((json) => setMyRacerData(json))
-        //setMyRacerData(result)
-    }, [])
+    }, [theData])
 
     async function getData() {
         return Promise.all(
-            racers.map( async (i) => {
-                return fetch(`http://ergast.com/api/f1/drivers/${i}.json`).then((res) => res.json())
+            theData.map( async (i) => {
+                return fetch(`http://ergast.com/api/f1/drivers/${i.racerId}.json`).then((res) => res.json())
             })
         )
     }
 
     async function getMyRacerData(){
         const result = await getData()
-        setMyRacerData(result)
-        
+        setMyRacerData(result) 
+    }
+
+    function filterData(driverId){
+        return theData.filter((i) => i.racerId === driverId)
+
+    }
+
+    async function handleDelete(driverId){
+        let driver = filterData(driverId)
+        const collection = firebaseInstance
+        .firestore()
+        .collection('SavedRacers')
+
+        const document = await collection.doc(driver[0].id).delete()
+        .then(() => {
+            console.log('Deleted!')
+        }).catch((error) => {
+            console.error('error', error)
+        })
     }
 
     return (
         <Screen>
             <AppTitle style={styles.title}>Your favorite racers</AppTitle>
-            <MaterialCommunityIcons
-                name="heart"
-                size={50}
-                style={styles.icon}
-                color={colors.danger}
-            />
-            {myRacerData.map((i, index) => {
+            {myRacerData.length === 0 ? <Text>No racers selected</Text> : myRacerData.map((i, index) => {
                 return(
                     <View key={index}>
                         <FlatList
@@ -62,7 +87,13 @@ function MyRacersScreen(props) {
                                     familyName={item.familyName}
                                     permanentNumber={item.permanentNumber}
                                     style={styles.listItem}
-
+                                    onPress={() => navigation.navigate('Racer', {
+                                        racer: item.driverId
+                                    })}
+                                    renderRightActions={() => <FavoriteRacerAction 
+                                        onPress={() => handleDelete(item.driverId)}
+                                        icon={"trash-can-outline"}
+                                    />}
                                 />
                             )}
                         />
@@ -90,7 +121,25 @@ const styles = StyleSheet.create({
 
 export default MyRacersScreen;
 
-/**return Promise.all(
+/*
+
+async function getPreviousData(collectionName) {
+        const collection = firebaseInstance.firestore().collection(collectionName)
+        const readCollection = await collection.get()
+
+        const returnedArray = []
+        
+        readCollection.forEach(item => {
+            returnedArray.push({
+                id: item.id,
+                ...item.data()
+            })
+        })
+
+        return setTheData(returnedArray)
+    }
+
+*return Promise.all(
             racers.map( async (i) => {
                 return fetch(`http://ergast.com/api/f1/drivers/${i}.json`).then((res) => res.json())
             })

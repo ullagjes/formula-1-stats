@@ -2,19 +2,21 @@ import React from 'react';
 
 import { View, StyleSheet } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { TouchableOpacity } from 'react-native-gesture-handler';
+import { TouchableHighlight } from 'react-native-gesture-handler';
 import colors from '../config/colors';
 
-function AddRacerToFavorites({ onPress }) {
+function FavoriteRacerAction({ onPress, icon, toggle }) {
+    
     return (
         <View style={styles.container}>
-            <TouchableOpacity onPress={onPress}>
+            <TouchableHighlight onPress={onPress} activeOpacity={0.2} underlayColor={colors.danger}>
                 <MaterialCommunityIcons
-                    name="heart-outline"
+                    name={icon}
                     size={40}
+                    color={toggle ? 'red' : 'white'}
                     style={styles.icon}
                 />
-            </TouchableOpacity>
+            </TouchableHighlight>
         </View>
     );
 }
@@ -32,4 +34,4 @@ const styles = StyleSheet.create({
     },
 })
 
-export default AddRacerToFavorites;
+export default FavoriteRacerAction;
