@@ -1,6 +1,7 @@
 import { Alert } from "react-native";
 import firebaseInstance from "./firebaseInstance";
 
+//REMOVES DOCUMENTS FROM COLLECTIONS IN FIRESTORE
 export async function deleteFromFirestore(filterData, collectionName, driverId){
     const collection = firebaseInstance
     .firestore()
@@ -13,24 +14,7 @@ export async function deleteFromFirestore(filterData, collectionName, driverId){
         Alert.alert(driverId + ' was not deleted!' + error)
     }) 
 }
-
-/*export function getRealTimeData(collectionName){
-    let ref = firebaseInstance
-    .firestore()
-    .collection(collectionName) 
-
-    ref.onSnapshot((snapshot => {
-        let data = []
-        snapshot.forEach((doc) => {
-            data.push({
-                id: doc.id,
-                ...doc.data()
-            })
-        })
-        return console.log('cleaned up')
-    }))
-}*/
-
+//ADDS DOCUMENTS TO COLLECTIONS IN FIRESTORE
 export async function addToFirestore(collectionName, documentId, name){
     const collection = firebaseInstance.firestore().collection(collectionName);
         const document = collection.doc(documentId)

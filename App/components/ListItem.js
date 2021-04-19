@@ -1,10 +1,10 @@
 import React from 'react';
-
 import { View, Text, StyleSheet } from 'react-native';
 
 import AppText from './AppText';
 import colors from '../config/colors';
 
+//COMPONENT IS RENDERED FOR API-DATA
 function ListItem({
     race, 
     circuit, 
@@ -28,7 +28,7 @@ function ListItem({
             <AppText style={styles.points}>Points earned: {points}</AppText>
         </View>
     );
-}
+};
 
 const styles = StyleSheet.create({
     container: {

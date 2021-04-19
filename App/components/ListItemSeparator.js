@@ -1,14 +1,14 @@
 import React from 'react';
-import { View, StyleSheet } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 
 import colors from '../config/colors'
 
-
+//COMPONENT IS USABLE FOR SEPARATING LIST ITEMS IN FLATLIST
 function ListItemSeparator() {
     return (
         <View style={styles.separator}/>
     );
-}
+};
 
 const styles = StyleSheet.create({
     separator: {
@@ -16,6 +16,6 @@ const styles = StyleSheet.create({
         height: 1,
         backgroundColor: colors.black,
     }
-})
+});
 
 export default ListItemSeparator;

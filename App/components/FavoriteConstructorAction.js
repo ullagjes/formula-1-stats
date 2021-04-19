@@ -1,13 +1,12 @@
 import React from 'react';
-
-import { View, StyleSheet } from 'react-native';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { StyleSheet, View } from 'react-native';
 import { TouchableHighlight } from 'react-native-gesture-handler';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 import colors from '../config/colors';
 
-//RENDERS ICON WHEN RACERLISTITEM IS SWIPED RIGHT TO LEFT
-function FavoriteRacerAction({ onPress, icon }) {
+//RENDERS ICON WHEN CONSTRUCTORLISTITEM IS SWIPED RIGHT TO LEFT
+function FavoriteConstructorAction({ onPress, icon }) {
     return (
         <View style={styles.container}>
             <TouchableHighlight 
@@ -24,7 +23,7 @@ function FavoriteRacerAction({ onPress, icon }) {
             </TouchableHighlight>
         </View>
     );
-}
+};
 
 const styles = StyleSheet.create({
     container: {
@@ -37,6 +36,6 @@ const styles = StyleSheet.create({
     icon:{
         alignSelf: 'center',
     },
-})
+});
 
-export default FavoriteRacerAction;
+export default FavoriteConstructorAction;

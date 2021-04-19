@@ -1,40 +1,44 @@
 import React, { useState, useEffect } from 'react';
 
-import { View, Text, StyleSheet } from 'react-native';
-import { MaterialCommunityIcons } from '@expo/vector-icons'
+import { StyleSheet, Text, View } from 'react-native';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 
-import colors from '../config/colors';
-
-import { getRacerDetails } from '../utils/apiHelpers';
+import { getRacerStandings } from '../utils/apiHelpers';
 
 import AppText from './AppText';
+import colors from '../config/colors';
 
-function RacerCard({ racerId }) {
+//CREATES A COMPONENT WITH API DATA RELEVANT TO SELECTED RACER
+function RacerCard({ racerId, icon, style }) {
     
     const [racerData, setRacerData] = useState(null)
 
+    //FETCHES API DATA WHEN SCREEN IS LOADED
     useEffect(() => {
         getRacerInfo()
     }, [])
 
+    //USES HELPER FUNCTION TO RETREIVE DATA
     async function getRacerInfo(){
-        const result = await getRacerDetails(racerId)
-        setRacerData(result.MRData.DriverTable.Drivers)
+        const result = await getRacerStandings(racerId)
+        setRacerData(result.MRData.StandingsTable.StandingsLists[0].DriverStandings)
     }
 
     return (
-        <View style={styles.card}>
+        <View style={[styles.card, style]}>
            <View style={styles.profile}>
                {racerData !== null 
                     ? <View style={styles.textContainer}>
-                        <AppText style={styles.title}>{racerData[0].givenName} {racerData[0].familyName}</AppText>
-                        <AppText>Nationality: {racerData[0].nationality}</AppText>
-                        <AppText>Number: {racerData[0].permanentNumber}</AppText>
+                        <AppText style={styles.title}>{racerData[0].Driver.givenName} {racerData[0].Driver.familyName}</AppText>
+                        <AppText>Nationality: {racerData[0].Driver.nationality}</AppText>
+                        <AppText>Number: {racerData[0].Driver.permanentNumber}</AppText>
+                        <AppText>Current rank: {racerData[0].position}</AppText>
+                        <AppText>Current points: {racerData[0].points}</AppText>
                     </View>
-                    : <Text>No data</Text>
+                    : <Text>Loading data...</Text>
                }
                 <MaterialCommunityIcons
-                    name="head-flash"
+                    name={icon}
                     size={70}
                     style={styles.icon}
                 />
@@ -57,14 +61,8 @@ const styles = StyleSheet.create({
 
     card: {
         backgroundColor: colors.primary,
-        padding: 30,
-        margin: 10,
-        borderRadius: 15,
-    },
-
-    textContainer: {
-        
-        
+        padding: 15,
+        marginBottom: 10,
     },
 
     icon: {

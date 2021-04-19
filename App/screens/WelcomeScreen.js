@@ -1,14 +1,12 @@
 import React from 'react';
-import { Text, StyleSheet, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 
-//COMPONENTS
 import AppText from '../components/AppText';
 import AppTitle from '../components//AppTitle';
+import colors from '../config/colors';
 import NavigateButton from '../components/NavigateButton';
 import Screen from '../components/Screen';
-import colors from '../config/colors';
-
 
 function WelcomeScreen({ navigation }) {
     return (
@@ -22,7 +20,7 @@ function WelcomeScreen({ navigation }) {
                 />
                 <AppText style={styles.text}>Get the latest stats on Formula 1 constructors and racers.</AppText>
                 <NavigateButton title={'Racers'} onPress={() => navigation.navigate('Racers')}/>
-                <NavigateButton title={'Constructors'} onPress={() => console.log('hallo')}/>
+                <NavigateButton title={'Constructors'} onPress={() => navigation.navigate('Constructors')}/>
             </View>
         </Screen>
     );
@@ -32,13 +30,10 @@ const styles = StyleSheet.create({
     container: {
         backgroundColor: colors.light,
         flex: 1,
-        paddingTop: 50,
     },
-
     icon: {
         alignSelf: 'center',
     },
-
     text: {
         marginHorizontal: 15,
         fontWeight: 'bold',
@@ -46,7 +41,7 @@ const styles = StyleSheet.create({
         fontSize: 25,
         alignSelf: 'center',
         textAlign: 'center',
-        color: colors.medium,
+        color: colors.danger,
     }
 })
 

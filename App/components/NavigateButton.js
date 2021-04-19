@@ -1,21 +1,22 @@
 import React from 'react';
+import { StyleSheet, TouchableOpacity, View} from 'react-native';
 
-import { TouchableOpacity, View, Text, StyleSheet } from 'react-native';
-import colors from '../config/colors';
 import AppText from './AppText'
+import colors from '../config/colors';
 
-function NavigateButton({ title, onPress }) {
+//UNIVERSAL APP BUTTON FOR NAVIGATION BETWEEN SCREENS
+function NavigateButton({ title, onPress, style }) {
     return (
         <TouchableOpacity 
             onPress={onPress}
-            style={styles.container}
+            style={[styles.container, style]}
         >
             <View style={styles.textContainer}>
                 <AppText style={styles.buttonText}>{title}</AppText>
             </View>
         </TouchableOpacity>
     );
-}
+};
 
 const styles = StyleSheet.create({
     buttonText: {
@@ -34,6 +35,6 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
     },
-})
+});
 
 export default NavigateButton;
