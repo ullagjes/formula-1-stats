@@ -28,8 +28,11 @@ function FavoriteRacerAction({ onPress, icon }) {
 
 const styles = StyleSheet.create({
     container: {
-        width: 60,
+        width: 80,
         height: '100%',
+        marginTop: 5,
+        marginBottom: 15,
+        alignSelf: 'center',
         alignContent: 'center',
         justifyContent: 'center',
         backgroundColor: colors.danger,

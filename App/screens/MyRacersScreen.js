@@ -11,11 +11,13 @@ import defaultContainer from '../config/defaultContainer';
 import FavoriteRacerAction from '../components/FavoriteRacerAction';
 import RacerListItem from '../components/RacerListItem';
 import Screen from '../components/Screen';
+import SkeletonComponent from '../components/SkeletonComponent';
 
 function MyRacersScreen({ navigation }) {
     
     const [theData, setTheData] = useState([])
     const [myRacerData, setMyRacerData] = useState(null)
+    const [loading, setLoading] = useState(true)
 
     //REALTIME DATA FROM FIRESTORE
     useEffect(() => { 
@@ -51,7 +53,8 @@ function MyRacersScreen({ navigation }) {
     //ADDS RACER DETAILS TO STATE
     async function getMyRacerData(){
         const result = await getData()
-        setMyRacerData(result) 
+        setMyRacerData(result)
+        setLoading(false)
     }
 
     //FILTERS DATA FOR DRIVERID. USED AS PARAMETER IN DELETE FUNCTION
@@ -65,39 +68,45 @@ function MyRacersScreen({ navigation }) {
         return deleteFromFirestore(driver.id, 'SavedRacers', driverId)   
     }
 
+    function renderRacers(){
+        return(
+            <FlatList
+                data={myRacerData}
+                keyExtractor={(data, index)=> index.toString()}
+                renderItem={({ item }) => (
+                    <RacerListItem
+                        givenName={item.MRData.StandingsTable.StandingsLists[0].DriverStandings[0].Driver.givenName}
+                        familyName={item.MRData.StandingsTable.StandingsLists[0].DriverStandings[0].Driver.familyName}
+                        onPress={() => navigation.navigate('Racer', {
+                            racer: item.MRData.StandingsTable.StandingsLists[0].DriverStandings[0].Driver.driverId
+                        })}
+                        renderRightActions={() => (
+                            <FavoriteRacerAction 
+                                onPress={() => handleDeleteRacer(item.MRData.StandingsTable.StandingsLists[0].DriverStandings[0].Driver.driverId)}
+                                icon={"trash-can-outline"}
+                            />
+                        )}
+                    >
+                        <View>
+                            <AppText>Current rank: {item.MRData.StandingsTable.StandingsLists[0].DriverStandings[0].position}</AppText>
+                            <AppText>Wins 2020: {item.MRData.StandingsTable.StandingsLists[0].DriverStandings[0].wins}</AppText>
+                            <AppText>Current points: {item.MRData.StandingsTable.StandingsLists[0].DriverStandings[0].points}</AppText>
+                        </View>
+                    </RacerListItem>
+                )}
+            />
+        )
+    }
+
     return (
         <Screen>
             <View style={defaultContainer}>
                 <AppTitle style={styles.title}>Your favorites</AppTitle>
                 <AppText>//Press to see results from each race // Swipe right to left to delete racer from favorites.</AppText>   
             </View>
-            {myRacerData === null 
-                ? <AppText>No favorites added.</AppText> 
-                : <FlatList
-                    data={myRacerData}
-                    keyExtractor={(data, index)=> index.toString()}
-                    renderItem={({ item }) => (
-                        <RacerListItem
-                            givenName={item.MRData.StandingsTable.StandingsLists[0].DriverStandings[0].Driver.givenName}
-                            familyName={item.MRData.StandingsTable.StandingsLists[0].DriverStandings[0].Driver.familyName}
-                            onPress={() => navigation.navigate('Racer', {
-                                racer: item.MRData.StandingsTable.StandingsLists[0].DriverStandings[0].Driver.driverId
-                            })}
-                            renderRightActions={() => (
-                                <FavoriteRacerAction 
-                                    onPress={() => handleDeleteRacer(item.MRData.StandingsTable.StandingsLists[0].DriverStandings[0].Driver.driverId)}
-                                    icon={"trash-can-outline"}
-                                />
-                            )}
-                        >
-                            <View>
-                                <AppText>Current rank: {item.MRData.StandingsTable.StandingsLists[0].DriverStandings[0].position}</AppText>
-                                <AppText>Wins 2020: {item.MRData.StandingsTable.StandingsLists[0].DriverStandings[0].wins}</AppText>
-                                <AppText>Current points: {item.MRData.StandingsTable.StandingsLists[0].DriverStandings[0].points}</AppText>
-                            </View>
-                        </RacerListItem>
-                    )}
-                />
+            {loading 
+                ? <SkeletonComponent />
+                : renderRacers()
             }
         </Screen>
     );

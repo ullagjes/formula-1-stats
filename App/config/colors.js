@@ -1,10 +1,10 @@
 //DEFAULT VALUES FOR ALL COLORS USED IN APP
 export default {
-    primary: '#fc5c65',
-    secondary: '#4ecdc4',
+    primary: '#ce1212',
+    secondary: '#810000',
     black: '#000',
     white: '#fff',
-    medium: '#ffeded',
+    medium: '#eeebdd',
     light: '#f8f4f4',
-    danger: '#ff5252',
+    danger: '#ce1212',
 }

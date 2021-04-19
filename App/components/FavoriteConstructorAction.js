@@ -16,7 +16,7 @@ function FavoriteConstructorAction({ onPress, icon }) {
             >
                 <MaterialCommunityIcons
                     name={icon}
-                    size={40}
+                    size={70}
                     color={'white'}
                     style={styles.icon}
                 />
@@ -27,8 +27,9 @@ function FavoriteConstructorAction({ onPress, icon }) {
 
 const styles = StyleSheet.create({
     container: {
-        width: 60,
-        height: '100%',
+        width: '30%',
+        height: '95%',
+        alignSelf:'center',
         alignContent: 'center',
         justifyContent: 'center',
         backgroundColor: colors.danger,

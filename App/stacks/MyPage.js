@@ -3,6 +3,7 @@ import 'react-native-gesture-handler';
 import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 
+
 import ConstructorDetailsScreen from '../screens/ConstructorDetailsScreen';
 import MyConstructorsScreen from '../screens/MyConstructorsScreen';
 import MyFavorites from '../screens/MyFavorites';

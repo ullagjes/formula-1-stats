@@ -50,9 +50,10 @@ const styles = StyleSheet.create({
         fontSize: 20,
         fontWeight: 'bold',
         alignSelf: 'center',
+        color: colors.light,
     },
     numberContainer: {
-        backgroundColor: colors.danger,
+        backgroundColor: colors.primary,
         width: 40,
         height: 40,
         marginRight: 20,

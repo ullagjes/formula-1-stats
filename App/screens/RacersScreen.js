@@ -57,7 +57,8 @@ function RacersScreen({ navigation }) {
                             )}
                         />
                     )}
-                />}
+                />
+            }
         </>
     );    
 }
